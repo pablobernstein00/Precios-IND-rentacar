@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Precios Arriendo Autos · Chile</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a26;
+    --accent: #00e5b4;
+    --accent2: #ff6b35;
+    --text: #f0efe8;
+    --muted: #7a7a8a;
+    --border: rgba(255,255,255,0.07);
+    --cheap: #00e5b4;
+    --mid: #f0c040;
+    --pricey: #ff6b35;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 2rem 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    background: linear-gradient(180deg, #0d0d18 0%, var(--bg) 100%);
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+  .logo span { color: var(--accent); }
+
+  .status-bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+
+  .status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--muted);
+    display: inline-block;
+    margin-right: 5px;
+  }
+  .status-dot.live { background: var(--accent); box-shadow: 0 0 6px var(--accent); animation: pulse 2s infinite; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+  }
+
+  /* ── Controls ── */
+  .controls {
+    padding: 1.5rem 2.5rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .filter-group label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  select, input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.45rem 0.75rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    border-radius: 4px;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  select:focus, input:focus { border-color: var(--accent); }
+
+  .btn {
+    padding: 0.5rem 1.2rem;
+    border: 1px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+    align-self: flex-end;
+  }
+  .btn:hover { background: var(--accent); color: var(--bg); }
+  .btn.primary { background: var(--accent); color: var(--bg); font-weight: 600; }
+  .btn.primary:hover { opacity: 0.85; }
+  .btn.danger { border-color: var(--pricey); color: var(--pricey); }
+  .btn.danger:hover { background: var(--pricey); color: white; }
+
+  /* ── Stats bar ── */
+  .stats {
+    display: flex;
+    gap: 0; 
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stat {
+    flex: 1;
+    padding: 1rem 2rem;
+    border-right: 1px solid var(--border);
+  }
+  .stat:last-child { border-right: none; }
+
+  .stat-label {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+  }
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  /* ── Table ── */
+  .table-wrap {
+    padding: 1.5rem 2.5rem 4rem;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+  }
+
+  thead th {
+    text-align: left;
+    padding: 0.6rem 1rem;
+    color: var(--muted);
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid var(--border);
+    font-weight: 400;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+  thead th:hover { color: var(--accent); }
+  thead th.sorted { color: var(--accent); }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  tbody tr:hover { background: var(--surface); }
+
+  tbody td {
+    padding: 0.8rem 1rem;
+    vertical-align: middle;
+  }
+
+  /* Region separator row */
+  tr.region-header td {
+    background: var(--surface2);
+    color: var(--accent);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 0.6rem 1rem;
+    border-top: 2px solid rgba(0,229,180,0.2);
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .cat-economico   { background: rgba(0,229,180,0.12); color: var(--cheap); border: 1px solid rgba(0,229,180,0.25); }
+  .cat-compacto    { background: rgba(0,180,229,0.12); color: #00b4e5; border: 1px solid rgba(0,180,229,0.25); }
+  .cat-intermedio  { background: rgba(240,192,64,0.12); color: var(--mid); border: 1px solid rgba(240,192,64,0.25); }
+  .cat-suv         { background: rgba(180,64,240,0.12); color: #b440f0; border: 1px solid rgba(180,64,240,0.25); }
+  .cat-premium     { background: rgba(255,107,53,0.12); color: var(--pricey); border: 1px solid rgba(255,107,53,0.25); }
+  .cat-pickup      { background: rgba(180,140,80,0.12); color: #b48c50; border: 1px solid rgba(180,140,80,0.25); }
+
+  .price {
+    font-weight: 500;
+    font-size: 0.85rem;
+  }
+  .price.cheap  { color: var(--cheap); }
+  .price.mid    { color: var(--mid); }
+  .price.pricey { color: var(--pricey); }
+
+  .rank {
+    color: var(--muted);
+    font-size: 0.65rem;
+    width: 28px;
+  }
+
+  /* ── Empty state ── */
+  .empty-state {
+    text-align: center;
+    padding: 5rem 2rem;
+    color: var(--muted);
+  }
+  .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.3; }
+  .empty-state h3 { font-family: 'Syne', sans-serif; font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem; }
+  .empty-state p { font-size: 0.78rem; line-height: 1.6; }
+
+  /* ── Update log ── */
+  .log-panel {
+    position: fixed;
+    bottom: 1rem;
+    right: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: 300px;
+    max-height: 200px;
+    overflow: hidden;
+    font-size: 0.65rem;
+    z-index: 100;
+    display: none;
+  }
+  .log-panel.open { display: block; }
+  .log-header {
+    padding: 0.5rem 0.8rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .log-body { padding: 0.6rem 0.8rem; overflow-y: auto; max-height: 150px; line-height: 1.8; color: var(--muted); }
+  .log-body .entry { display: flex; gap: 0.5rem; }
+  .log-body .entry .ts { color: var(--accent); opacity: 0.7; }
+
+  /* ── Modal (agregar datos) ── */
+  .overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  .overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    width: min(560px, 95vw);
+    padding: 2rem;
+  }
+  .modal h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    color: var(--accent);
+  }
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-group label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .form-group input, .form-group select { width: 100%; }
+  .modal-actions { display: flex; gap: 0.8rem; justify-content: flex-end; }
+
+  /* ── Scraping info ── */
+  .info-banner {
+    margin: 1rem 2.5rem;
+    padding: 0.75rem 1rem;
+    background: rgba(255,107,53,0.08);
+    border: 1px solid rgba(255,107,53,0.2);
+    border-radius: 6px;
+    font-size: 0.72rem;
+    color: var(--pricey);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  @media (max-width: 700px) {
+    header, .controls, .table-wrap { padding-left: 1rem; padding-right: 1rem; }
+    .stats { flex-wrap: wrap; }
+    .stat { min-width: 50%; }
+    .form-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">arriendo<span>.cl</span> <span style="color:var(--muted);font-weight:400;font-size:1rem;">/ precios</span></div>
+  <div class="status-bar">
+    <span><span class="status-dot" id="statusDot"></span><span id="statusText">Sin datos</span></span>
+    <span id="lastUpdate" style="color:var(--muted)">—</span>
+    <button class="btn" onclick="toggleLog()">Log</button>
+    <button class="btn primary" onclick="triggerScrape()">↻ Actualizar ahora</button>
+  </div>
+</header>
+
+<div class="info-banner">
+  ⚠ El scraping automático puede fallar si rentalcars.cl cambia su sitio o bloquea robots. Los datos se guardan en tu navegador y persisten al cerrar.
+</div>
+
+<div class="controls">
+  <div class="filter-group">
+    <label>Región</label>
+    <select id="filterRegion" onchange="renderTable()">
+      <option value="">Todas</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <label>Categoría</label>
+    <select id="filterCat" onchange="renderTable()">
+      <option value="">Todas</option>
+      <option value="Económico">Económico</option>
+      <option value="Compacto">Compacto</option>
+      <option value="Intermedio">Intermedio</option>
+      <option value="SUV">SUV</option>
+      <option value="Premium">Premium</option>
+      <option value="Pickup">Pickup</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <label>Buscar modelo</label>
+    <input type="text" id="filterSearch" placeholder="ej: Corolla..." oninput="renderTable()">
+  </div>
+  <button class="btn" onclick="openModal()">+ Agregar manual</button>
+  <button class="btn danger" onclick="clearData()">Borrar todo</button>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <div class="stat-label">Total registros</div>
+    <div class="stat-value" id="statTotal">0</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Más barato / día</div>
+    <div class="stat-value" id="statMin">—</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Promedio / día</div>
+    <div class="stat-value" id="statAvg">—</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Regiones</div>
+    <div class="stat-value" id="statRegions">0</div>
+  </div>
+</div>
+
+<div class="table-wrap">
+  <table id="mainTable">
+    <thead>
+      <tr>
+        <th class="rank">#</th>
+        <th onclick="sortBy('region')">Región <span id="sort-region"></span></th>
+        <th onclick="sortBy('ciudad')">Ciudad</th>
+        <th onclick="sortBy('categoria')">Categoría</th>
+        <th onclick="sortBy('modelo')">Modelo</th>
+        <th onclick="sortBy('precio_dia')">Precio/día ↕</th>
+        <th onclick="sortBy('precio_semana')">Precio/semana</th>
+        <th>Transmisión</th>
+        <th>Fuente</th>
+        <th>Actualizado</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
+
+<!-- Log panel -->
+<div class="log-panel" id="logPanel">
+  <div class="log-header" onclick="toggleLog()">
+    <span>📋 Log de actualizaciones</span>
+    <span>✕</span>
+  </div>
+  <div class="log-body" id="logBody"></div>
+</div>
+
+<!-- Modal agregar manual -->
+<div class="overlay" id="modalOverlay">
+  <div class="modal">
+    <h2>+ Agregar precio manual</h2>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Región</label>
+        <select id="mRegion">
+          <option>Arica y Parinacota</option>
+          <option>Tarapacá</option>
+          <option>Antofagasta</option>
+          <option>Atacama</option>
+          <option>Coquimbo</option>
+          <option>Valparaíso</option>
+          <option>Metropolitana</option>
+          <option>O'Higgins</option>
+          <option>Maule</option>
+          <option>Ñuble</option>
+          <option>Biobío</option>
+          <option>Araucanía</option>
+          <option>Los Ríos</option>
+          <option>Los Lagos</option>
+          <option>Aysén</option>
+          <option>Magallanes</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Ciudad</label>
+        <input id="mCiudad" placeholder="ej: Santiago" type="text">
+      </div>
+      <div class="form-group">
+        <label>Categoría</label>
+        <select id="mCat">
+          <option>Económico</option>
+          <option>Compacto</option>
+          <option>Intermedio</option>
+          <option>SUV</option>
+          <option>Premium</option>
+          <option>Pickup</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Modelo</label>
+        <input id="mModelo" placeholder="ej: Toyota Corolla" type="text">
+      </div>
+      <div class="form-group">
+        <label>Precio por día (CLP)</label>
+        <input id="mPrecioDia" type="number" placeholder="25000">
+      </div>
+      <div class="form-group">
+        <label>Precio por semana (CLP)</label>
+        <input id="mPrecioSemana" type="number" placeholder="140000">
+      </div>
+      <div class="form-group">
+        <label>Transmisión</label>
+        <select id="mTransm">
+          <option>Manual</option>
+          <option>Automático</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Fuente</label>
+        <input id="mFuente" placeholder="rentalcars.cl" type="text" value="rentalcars.cl">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal()">Cancelar</button>
+      <button class="btn primary" onclick="saveManual()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Storage helpers ──
+const STORAGE_KEY = 'rental_prices_cl';
+const LOG_KEY = 'rental_log_cl';
+
+function loadData() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
+}
+function saveData(arr) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+}
+function loadLog() {
+  try { return JSON.parse(localStorage.getItem(LOG_KEY) || '[]'); } catch { return []; }
+}
+function addLog(msg) {
+  const log = loadLog();
+  log.unshift({ ts: new Date().toLocaleString('es-CL'), msg });
+  if (log.length > 50) log.pop();
+  localStorage.setItem(LOG_KEY, JSON.stringify(log));
+  renderLog();
+}
+
+// ── Sort state ──
+let sortField = 'precio_dia';
+let sortDir = 1;
+
+function sortBy(field) {
+  if (sortField === field) sortDir *= -1;
+  else { sortField = field; sortDir = 1; }
+  renderTable();
+}
+
+// ── Formatting ──
+function fmt(n) {
+  if (!n) return '—';
+  return '$' + Number(n).toLocaleString('es-CL');
+}
+function priceClass(p, min, max) {
+  const ratio = (p - min) / (max - min + 1);
+  if (ratio < 0.33) return 'cheap';
+  if (ratio < 0.66) return 'mid';
+  return 'pricey';
+}
+function catClass(cat) {
+  const map = { 'Económico':'economico','Compacto':'compacto','Intermedio':'intermedio','SUV':'suv','Premium':'premium','Pickup':'pickup' };
+  return 'cat-' + (map[cat] || 'economico');
+}
+
+// ── Render ──
+function renderTable() {
+  const data = loadData();
+  const region = document.getElementById('filterRegion').value;
+  const cat = document.getElementById('filterCat').value;
+  const search = document.getElementById('filterSearch').value.toLowerCase();
+
+  let rows = data.filter(r =>
+    (!region || r.region === region) &&
+    (!cat || r.categoria === cat) &&
+    (!search || (r.modelo||'').toLowerCase().includes(search))
+  );
+
+  rows.sort((a, b) => {
+    let va = a[sortField] ?? '';
+    let vb = b[sortField] ?? '';
+    if (sortField === 'precio_dia' || sortField === 'precio_semana') { va = +va; vb = +vb; }
+    if (va < vb) return -sortDir;
+    if (va > vb) return sortDir;
+    return 0;
+  });
+
+  const body = document.getElementById('tableBody');
+
+  if (rows.length === 0) {
+    body.innerHTML = `<tr><td colspan="10">
+      <div class="empty-state">
+        <div class="icon">🚗</div>
+        <h3>Sin datos aún</h3>
+        <p>Haz clic en <strong>↻ Actualizar ahora</strong> para intentar extraer precios,<br>o usa <strong>+ Agregar manual</strong> para ingresar precios tú mismo.</p>
+      </div>
+    </td></tr>`;
+    updateStats([]);
+    return;
+  }
+
+  const prices = rows.map(r => +r.precio_dia).filter(Boolean);
+  const min = Math.min(...prices);
+  const max = Math.max(...prices);
+
+  // Group by region
+  const byRegion = {};
+  rows.forEach(r => {
+    if (!byRegion[r.region]) byRegion[r.region] = [];
+    byRegion[r.region].push(r);
+  });
+
+  // Populate region filter
+  const allRegions = [...new Set(data.map(r => r.region))].sort();
+  const regSel = document.getElementById('filterRegion');
+  const curReg = regSel.value;
+  regSel.innerHTML = '<option value="">Todas</option>' + allRegions.map(r => `<option ${r===curReg?'selected':''} value="${r}">${r}</option>`).join('');
+
+  let html = '';
+  let globalIdx = 1;
+
+  if (region) {
+    // Single region: flat list
+    rows.forEach(r => {
+      html += rowHTML(r, globalIdx++, min, max);
+    });
+  } else {
+    // All regions: grouped
+    Object.keys(byRegion).sort().forEach(reg => {
+      html += `<tr class="region-header"><td colspan="10">📍 ${reg}</td></tr>`;
+      byRegion[reg].forEach(r => {
+        html += rowHTML(r, globalIdx++, min, max);
+      });
+    });
+  }
+
+  body.innerHTML = html;
+  updateStats(data);
+}
+
+function rowHTML(r, idx, min, max) {
+  const pc = priceClass(+r.precio_dia, min, max);
+  const date = r.fecha ? new Date(r.fecha).toLocaleDateString('es-CL') : '—';
+  return `<tr>
+    <td class="rank">${idx}</td>
+    <td>${r.region || '—'}</td>
+    <td>${r.ciudad || '—'}</td>
+    <td><span class="badge ${catClass(r.categoria)}">${r.categoria || '—'}</span></td>
+    <td>${r.modelo || '—'}</td>
+    <td><span class="price ${pc}">${fmt(r.precio_dia)}</span></td>
+    <td style="color:var(--muted)">${fmt(r.precio_semana)}</td>
+    <td style="color:var(--muted);font-size:0.7rem">${r.transmision || '—'}</td>
+    <td style="color:var(--muted);font-size:0.68rem">${r.fuente || '—'}</td>
+    <td style="color:var(--muted);font-size:0.68rem">${date}</td>
+  </tr>`;
+}
+
+function updateStats(data) {
+  const prices = data.map(r => +r.precio_dia).filter(Boolean);
+  document.getElementById('statTotal').textContent = data.length;
+  document.getElementById('statMin').textContent = prices.length ? fmt(Math.min(...prices)) : '—';
+  document.getElementById('statAvg').textContent = prices.length ? fmt(Math.round(prices.reduce((a,b)=>a+b,0)/prices.length)) : '—';
+  document.getElementById('statRegions').textContent = new Set(data.map(r=>r.region)).size;
+
+  const dot = document.getElementById('statusDot');
+  const txt = document.getElementById('statusText');
+  if (data.length > 0) {
+    dot.className = 'status-dot live';
+    txt.textContent = 'Datos cargados';
+    const last = data.reduce((a,b) => new Date(a.fecha) > new Date(b.fecha) ? a : b, data[0]);
+    document.getElementById('lastUpdate').textContent = 'Últ: ' + new Date(last.fecha).toLocaleString('es-CL');
+  } else {
+    dot.className = 'status-dot';
+    txt.textContent = 'Sin datos';
+    document.getElementById('lastUpdate').textContent = '—';
+  }
+}
+
+// ── Modal ──
+function openModal() { document.getElementById('modalOverlay').classList.add('open'); }
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+function saveManual() {
+  const entry = {
+    id: Date.now(),
+    region: document.getElementById('mRegion').value,
+    ciudad: document.getElementById('mCiudad').value || '—',
+    categoria: document.getElementById('mCat').value,
+    modelo: document.getElementById('mModelo').value || 'Sin especificar',
+    precio_dia: +document.getElementById('mPrecioDia').value || 0,
+    precio_semana: +document.getElementById('mPrecioSemana').value || 0,
+    transmision: document.getElementById('mTransm').value,
+    fuente: document.getElementById('mFuente').value || 'manual',
+    fecha: new Date().toISOString()
+  };
+  const data = loadData();
+  data.push(entry);
+  saveData(data);
+  addLog(`✚ Manual: ${entry.modelo} (${entry.region}) — ${fmt(entry.precio_dia)}/día`);
+  closeModal();
+  renderTable();
+}
+
+// ── Clear ──
+function clearData() {
+  if (!confirm('¿Borrar todos los datos guardados?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  addLog('🗑 Datos borrados');
+  renderTable();
+}
+
+// ── Log panel ──
+function toggleLog() {
+  document.getElementById('logPanel').classList.toggle('open');
+  renderLog();
+}
+function renderLog() {
+  const log = loadLog();
+  document.getElementById('logBody').innerHTML = log.map(l =>
+    `<div class="entry"><span class="ts">${l.ts}</span> ${l.msg}</div>`
+  ).join('') || '<span style="opacity:0.4">Sin eventos aún.</span>';
+}
+
+// ── Scraping via proxy / CORS ──
+// rentalcars.cl uses Booking.com infrastructure — we use allorigins as CORS proxy
+// NOTE: scraping may fail depending on site's bot detection
+async function triggerScrape() {
+  const btn = document.querySelector('.btn.primary');
+  btn.textContent = '⌛ Extrayendo...';
+  btn.disabled = true;
+  addLog('🔄 Iniciando extracción de rentalcars.cl…');
+
+  const cities = [
+    { ciudad: 'Santiago', region: 'Metropolitana', code: 'SCL' },
+    { ciudad: 'Concepción', region: 'Biobío', code: 'CCP' },
+    { ciudad: 'Valparaíso', region: 'Valparaíso', code: 'VAP' },
+    { ciudad: 'Puerto Montt', region: 'Los Lagos', code: 'PMC' },
+    { ciudad: 'Antofagasta', region: 'Antofagasta', code: 'ANF' },
+    { ciudad: 'Punta Arenas', region: 'Magallanes', code: 'PUQ' },
+  ];
+
+  let newEntries = [];
+  let errors = 0;
+
+  // Try via allorigins proxy
+  for (const city of cities) {
+    try {
+      const pickup = encodeURIComponent(new Date(Date.now() + 7*86400000).toISOString().split('T')[0]);
+      const dropoff = encodeURIComponent(new Date(Date.now() + 14*86400000).toISOString().split('T')[0]);
+      const targetUrl = `https://www.rentalcars.com/SearchResults.do?country=CL&city=${city.code}&puDay=12&puMonth=5&puYear=2025&doDay=19&doMonth=5&doYear=2025&puHour=10&puMinute=00&doHour=10&doMinute=00`;
+      const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+
+      const resp = await fetch(proxy, { signal: AbortSignal.timeout(12000) });
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      const json = await resp.json();
+      const html = json.contents || '';
+
+      // Parse prices from HTML
+      const parsed = parseRentalcarsHTML(html, city);
+      newEntries = newEntries.concat(parsed);
+      addLog(`✓ ${city.ciudad}: ${parsed.length} resultados`);
+
+    } catch (err) {
+      errors++;
+      addLog(`✗ ${city.ciudad}: ${err.message}`);
+    }
+  }
+
+  // Merge with existing data (replace same city entries)
+  if (newEntries.length > 0) {
+    let existing = loadData().filter(r => !cities.find(c => c.ciudad === r.ciudad && r.fuente === 'rentalcars.cl'));
+    const merged = [...existing, ...newEntries];
+    saveData(merged);
+    addLog(`✅ ${newEntries.length} precios guardados. ${errors} errores.`);
+    // Schedule next update
+    scheduleNextUpdate();
+    // Send Telegram notification
+    await sendTelegram(newEntries.length, errors);
+    renderTable();
+  } else {
+    addLog(`⚠ Sin resultados. El sitio puede estar bloqueando robots. Usa "Agregar manual".`);
+  }
+
+  btn.textContent = '↻ Actualizar ahora';
+  btn.disabled = false;
+}
+
+// ── Parse rentalcars.com HTML ──
+function parseRentalcarsHTML(html, city) {
+  const results = [];
+  if (!html || html.length < 500) return results;
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+
+  // Rentalcars renders prices in various selectors — try multiple patterns
+  const carCards = doc.querySelectorAll('[data-testid="search-result"], .car-detail, .listing-item, [class*="CarTile"], [class*="SearchResult"]');
+
+  carCards.forEach(card => {
+    try {
+      const modelEl = card.querySelector('[data-testid="car-name"], .car-name, [class*="CarName"], h3, .vehicle-name');
+      const priceEl = card.querySelector('[data-testid="price"], .price, [class*="Price"], [class*="price"]');
+      const catEl = card.querySelector('[data-testid="car-category"], .car-category, [class*="Category"]');
+
+      if (!priceEl) return;
+      const priceText = priceEl.textContent.replace(/[^\d]/g, '');
+      const price = parseInt(priceText);
+      if (!price || price < 1000) return;
+
+      const model = modelEl ? modelEl.textContent.trim() : 'Sin especificar';
+      const catRaw = catEl ? catEl.textContent.trim() : '';
+      const categoria = guessCategory(catRaw || model);
+
+      results.push({
+        id: Date.now() + Math.random(),
+        region: city.region,
+        ciudad: city.ciudad,
+        categoria,
+        modelo: model.substring(0, 50),
+        precio_dia: price,
+        precio_semana: price * 6,
+        transmision: model.toLowerCase().includes('auto') ? 'Automático' : 'Manual',
+        fuente: 'rentalcars.cl',
+        fecha: new Date().toISOString()
+      });
+    } catch (_) {}
+  });
+
+  // Fallback: regex price extraction if DOM parsing fails
+  if (results.length === 0) {
+    const priceRgx = /\$[\s]*([\d.,]+)/g;
+    let m;
+    const prices = [];
+    while ((m = priceRgx.exec(html)) !== null) {
+      const v = parseInt(m[1].replace(/[.,]/g,''));
+      if (v > 5000 && v < 500000) prices.push(v);
+    }
+    const unique = [...new Set(prices)].slice(0, 8);
+    const cats = ['Económico','Compacto','Intermedio','SUV','Premium'];
+    unique.forEach((p, i) => {
+      results.push({
+        id: Date.now() + i,
+        region: city.region,
+        ciudad: city.ciudad,
+        categoria: cats[i % cats.length],
+        modelo: 'Extraído automáticamente',
+        precio_dia: p,
+        precio_semana: p * 6,
+        transmision: '—',
+        fuente: 'rentalcars.cl',
+        fecha: new Date().toISOString()
+      });
+    });
+  }
+
+  return results;
+}
+
+function guessCategory(text) {
+  const t = text.toLowerCase();
+  if (t.includes('econom') || t.includes('mini') || t.includes('small')) return 'Económico';
+  if (t.includes('compact')) return 'Compacto';
+  if (t.includes('suv') || t.includes('4x4') || t.includes('crossover')) return 'SUV';
+  if (t.includes('premium') || t.includes('luxury') || t.includes('ejecutivo')) return 'Premium';
+  if (t.includes('pickup') || t.includes('truck') || t.includes('hilux') || t.includes('ranger')) return 'Pickup';
+  return 'Intermedio';
+}
+
+// ── Telegram notification ──
+async function sendTelegram(count, errors) {
+  const cfg = getTelegramConfig();
+  if (!cfg.token || !cfg.chatId) {
+    addLog('⚠ Telegram no configurado (ver configuración)');
+    return;
+  }
+  const msg = `🚗 *Precios actualizados — arriendo.cl*\n\n✅ ${count} precios nuevos cargados\n${errors > 0 ? `⚠ ${errors} ciudades con error\n` : ''}📅 ${new Date().toLocaleString('es-CL')}\n\n_Ver precios en tu página web_`;
+  try {
+    const r = await fetch(`https://api.telegram.org/bot${cfg.token}/sendMessage`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ chat_id: cfg.chatId, text: msg, parse_mode: 'Markdown' })
+    });
+    const j = await r.json();
+    if (j.ok) addLog('📨 Telegram: notificación enviada');
+    else addLog('✗ Telegram error: ' + j.description);
+  } catch (e) {
+    addLog('✗ Telegram: ' + e.message);
+  }
+}
+
+function getTelegramConfig() {
+  try { return JSON.parse(localStorage.getItem('telegram_cfg') || '{}'); } catch { return {}; }
+}
+
+// ── Auto-update (once per day) ──
+function scheduleNextUpdate() {
+  const nextMs = 24 * 60 * 60 * 1000;
+  localStorage.setItem('rental_next_update', Date.now() + nextMs);
+}
+
+function checkAutoUpdate() {
+  const next = parseInt(localStorage.getItem('rental_next_update') || '0');
+  if (Date.now() >= next && loadData().length > 0) {
+    addLog('⏰ Actualización automática diaria iniciada');
+    triggerScrape();
+  }
+}
+
+// ── Init ──
+renderTable();
+renderLog();
+checkAutoUpdate();
+setInterval(checkAutoUpdate, 60 * 60 * 1000); // Check every hour
+
+// Show telegram config if not set
+const tc = getTelegramConfig();
+if (!tc.token) {
+  setTimeout(() => {
+    const show = confirm('¿Configurar notificaciones de Telegram ahora?\n\n(Necesitas tu Bot Token y Chat ID)');
+    if (show) {
+      const token = prompt('Token de tu bot de Telegram:\n(lo da @BotFather)');
+      const chatId = prompt('Tu Chat ID de Telegram:\n(consúltalo en @userinfobot)');
+      if (token && chatId) {
+        localStorage.setItem('telegram_cfg', JSON.stringify({ token, chatId }));
+        addLog('✅ Telegram configurado');
+      }
+    }
+  }, 2000);
+}
+</script>
+</body>
+</html>
