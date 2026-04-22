@@ -705,44 +705,52 @@ function renderLog() {
   ).join('') || '<span style="opacity:0.4">Sin eventos aún.</span>';
 }
 
-// ── Scraping via proxy / CORS ──
-// rentalcars.cl uses Booking.com infrastructure — we use allorigins as CORS proxy
-// NOTE: scraping may fail depending on site's bot detection
+// ── Scraping via ScraperAPI (rota IPs, evita bloqueos) ──
+const SCRAPER_API_KEY = 'ef12b3a8af8fd195d29b79eb47d099e4';
+
 async function triggerScrape() {
   const btn = document.querySelector('.btn.primary');
   btn.textContent = '⌛ Extrayendo...';
   btn.disabled = true;
-  addLog('🔄 Iniciando extracción de rentalcars.cl…');
+  addLog('🔄 Iniciando extracción via ScraperAPI…');
 
   const cities = [
-    { ciudad: 'Santiago', region: 'Metropolitana', code: 'SCL' },
-    { ciudad: 'Concepción', region: 'Biobío', code: 'CCP' },
-    { ciudad: 'Valparaíso', region: 'Valparaíso', code: 'VAP' },
-    { ciudad: 'Puerto Montt', region: 'Los Lagos', code: 'PMC' },
-    { ciudad: 'Antofagasta', region: 'Antofagasta', code: 'ANF' },
-    { ciudad: 'Punta Arenas', region: 'Magallanes', code: 'PUQ' },
+    { ciudad: 'Santiago',     region: 'Metropolitana', code: 'SCL' },
+    { ciudad: 'Concepción',   region: 'Biobío',        code: 'CCP' },
+    { ciudad: 'Valparaíso',   region: 'Valparaíso',    code: 'VAP' },
+    { ciudad: 'Puerto Montt', region: 'Los Lagos',      code: 'PMC' },
+    { ciudad: 'Antofagasta',  region: 'Antofagasta',   code: 'ANF' },
+    { ciudad: 'Punta Arenas', region: 'Magallanes',    code: 'PUQ' },
   ];
 
   let newEntries = [];
   let errors = 0;
 
-  // Try via allorigins proxy
+  // Build dates: pickup = 7 days from now, dropoff = 14 days from now
+  const now = new Date();
+  const pickup = new Date(now.getTime() + 7*86400000);
+  const dropoff = new Date(now.getTime() + 14*86400000);
+  const puDay = pickup.getDate(), puMonth = pickup.getMonth()+1, puYear = pickup.getFullYear();
+  const doDay = dropoff.getDate(), doMonth = dropoff.getMonth()+1, doYear = dropoff.getFullYear();
+
   for (const city of cities) {
     try {
-      const pickup = encodeURIComponent(new Date(Date.now() + 7*86400000).toISOString().split('T')[0]);
-      const dropoff = encodeURIComponent(new Date(Date.now() + 14*86400000).toISOString().split('T')[0]);
-      const targetUrl = `https://www.rentalcars.com/SearchResults.do?country=CL&city=${city.code}&puDay=12&puMonth=5&puYear=2025&doDay=19&doMonth=5&doYear=2025&puHour=10&puMinute=00&doHour=10&doMinute=00`;
-      const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+      const targetUrl = `https://www.rentalcars.com/SearchResults.do?country=CL&city=${city.code}&puDay=${puDay}&puMonth=${puMonth}&puYear=${puYear}&doDay=${doDay}&doMonth=${doMonth}&doYear=${doYear}&puHour=10&puMinute=00&doHour=10&doMinute=00`;
+      
+      // ScraperAPI: rota IPs, maneja JS rendering y anti-bot
+      const scraperUrl = `https://api.scraperapi.com/?api_key=${SCRAPER_API_KEY}&url=${encodeURIComponent(targetUrl)}&render=true&country_code=cl`;
 
-      const resp = await fetch(proxy, { signal: AbortSignal.timeout(12000) });
+      addLog(`⏳ Consultando ${city.ciudad}…`);
+      const resp = await fetch(scraperUrl, { signal: AbortSignal.timeout(45000) });
       if (!resp.ok) throw new Error('HTTP ' + resp.status);
-      const json = await resp.json();
-      const html = json.contents || '';
+      const html = await resp.text();
 
-      // Parse prices from HTML
       const parsed = parseRentalcarsHTML(html, city);
       newEntries = newEntries.concat(parsed);
-      addLog(`✓ ${city.ciudad}: ${parsed.length} resultados`);
+      addLog(`✓ ${city.ciudad}: ${parsed.length} precios encontrados`);
+
+      // Pausa entre requests para no saturar
+      await new Promise(r => setTimeout(r, 2000));
 
     } catch (err) {
       errors++;
