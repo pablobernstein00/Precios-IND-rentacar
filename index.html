@@ -3,42 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Precios Arriendo Autos · Chile</title>
+<title>Inteligencia Competitiva · Arriendo Autos Chile</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:#0a0a0f; --surface:#12121a; --surface2:#1a1a26;
-    --accent:#00e5b4; --text:#f0efe8; --muted:#7a7a8a;
-    --border:rgba(255,255,255,0.07); --cheap:#00e5b4; --mid:#f0c040; --pricey:#ff6b35;
-  }
+  :root{--bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a26;--accent:#00e5b4;--text:#f0efe8;--muted:#7a7a8a;--border:rgba(255,255,255,0.07);--cheap:#00e5b4;--mid:#f0c040;--pricey:#ff6b35;}
   *{margin:0;padding:0;box-sizing:border-box;}
   body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospace;min-height:100vh;}
-  header{border-bottom:1px solid var(--border);padding:1.2rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;background:linear-gradient(180deg,#0d0d18 0%,var(--bg) 100%);}
-  .logo{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;letter-spacing:-0.03em;}
+  header{border-bottom:1px solid var(--border);padding:1.2rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;background:linear-gradient(180deg,#0d0d18 0%,var(--bg) 100%);}
+  .logo{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;letter-spacing:-.03em;}
   .logo span{color:var(--accent);}
-  .status-bar{display:flex;align-items:center;gap:0.75rem;font-size:0.68rem;color:var(--muted);flex-wrap:wrap;}
+  .logo small{color:var(--muted);font-weight:400;font-size:.8rem;}
+  .status-bar{display:flex;align-items:center;gap:.75rem;font-size:.68rem;color:var(--muted);flex-wrap:wrap;}
   .dot{width:6px;height:6px;border-radius:50%;background:var(--muted);display:inline-block;margin-right:3px;}
   .dot.live{background:var(--accent);box-shadow:0 0 5px var(--accent);animation:pulse 2s infinite;}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-  .btn{padding:.4rem .9rem;border:1px solid var(--accent);background:transparent;color:var(--accent);font-family:'IBM Plex Mono',monospace;font-size:.7rem;cursor:pointer;border-radius:4px;transition:all .2s;letter-spacing:.04em;}
+  .btn{padding:.4rem .9rem;border:1px solid var(--accent);background:transparent;color:var(--accent);font-family:'IBM Plex Mono',monospace;font-size:.7rem;cursor:pointer;border-radius:4px;transition:all .2s;}
   .btn:hover{background:var(--accent);color:var(--bg);}
-  .btn.p{background:var(--accent);color:var(--bg);font-weight:600;}
-  .btn.p:hover{opacity:.85;}
-  .btn.w{border-color:var(--mid);color:var(--mid);}
-  .btn.w:hover{background:var(--mid);color:var(--bg);}
   .tabs{display:flex;border-bottom:1px solid var(--border);background:var(--surface);}
-  .tab{padding:.65rem 1.3rem;font-size:.68rem;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all .2s;text-transform:uppercase;letter-spacing:.06em;}
+  .tab{padding:.65rem 1.3rem;font-size:.67rem;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all .2s;text-transform:uppercase;letter-spacing:.06em;}
   .tab.active{color:var(--accent);border-bottom-color:var(--accent);}
   .controls{padding:.8rem 2rem;display:flex;gap:.6rem;flex-wrap:wrap;align-items:flex-end;border-bottom:1px solid var(--border);background:var(--surface);}
   .fg{display:flex;flex-direction:column;gap:.2rem;}
   .fg label{font-size:.57rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);}
   select,input[type=text]{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:.35rem .55rem;font-family:'IBM Plex Mono',monospace;font-size:.72rem;border-radius:4px;cursor:pointer;outline:none;transition:border-color .2s;}
   select:focus,input[type=text]:focus{border-color:var(--accent);}
-  .stats{display:flex;border-bottom:1px solid var(--border);}
-  .stat{flex:1;padding:.7rem 1.3rem;border-right:1px solid var(--border);}
+  .stats{display:flex;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+  .stat{flex:1;min-width:130px;padding:.7rem 1.3rem;border-right:1px solid var(--border);}
   .stat:last-child{border-right:none;}
   .slabel{font-size:.57rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.15rem;}
-  .sval{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:700;color:var(--accent);}
+  .sval{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:var(--accent);}
   .tw{padding:1rem 2rem 4rem;overflow-x:auto;}
   table{width:100%;border-collapse:collapse;font-size:.73rem;}
   thead th{text-align:left;padding:.45rem .7rem;color:var(--muted);font-size:.58rem;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--border);font-weight:400;cursor:pointer;user-select:none;white-space:nowrap;}
@@ -47,6 +40,8 @@
   tbody tr:hover{background:var(--surface);}
   tbody td{padding:.65rem .7rem;vertical-align:middle;}
   tr.ch td{background:var(--surface2);color:var(--accent);font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;padding:.45rem .7rem;border-top:2px solid rgba(0,229,180,.15);}
+  tr.eco{background:rgba(0,229,180,.04);}
+  tr.eco:hover{background:rgba(0,229,180,.09);}
   .badge{display:inline-block;padding:.16rem .4rem;border-radius:3px;font-size:.6rem;font-weight:500;text-transform:uppercase;}
   .ce{background:rgba(0,229,180,.12);color:var(--cheap);border:1px solid rgba(0,229,180,.25);}
   .cc{background:rgba(0,180,229,.12);color:#00b4e5;border:1px solid rgba(0,180,229,.25);}
@@ -55,89 +50,46 @@
   .cp{background:rgba(255,107,53,.12);color:var(--pricey);border:1px solid rgba(255,107,53,.25);}
   .ck{background:rgba(180,140,80,.12);color:#b48c50;border:1px solid rgba(180,140,80,.25);}
   .price{font-weight:500;font-size:.8rem;}
-  .cheap{color:var(--cheap);} .mid{color:var(--mid);} .pricey{color:var(--pricey);}
+  .cheap{color:var(--cheap);}.mid{color:var(--mid);}.pricey{color:var(--pricey);}
   .edot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px;}
-  /* update panel */
-  .upanel{padding:1.2rem 2rem;border-bottom:1px solid var(--border);display:none;}
-  .upanel.open{display:block;}
-  .ugrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.8rem;margin-top:.8rem;}
-  .ecard{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.9rem;}
-  .ecard h3{font-family:'Syne',sans-serif;font-size:.8rem;font-weight:700;margin-bottom:.6rem;display:flex;align-items:center;gap:.4rem;}
-  .ecard a{font-size:.6rem;color:var(--muted);text-decoration:none;margin-left:auto;}
-  .ecard a:hover{color:var(--accent);}
-  .pr{display:flex;align-items:center;gap:.4rem;margin-bottom:.3rem;}
-  .pr label{font-size:.62rem;color:var(--muted);width:85px;flex-shrink:0;}
-  .pr input{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:.28rem .45rem;font-family:'IBM Plex Mono',monospace;font-size:.7rem;border-radius:3px;width:100%;outline:none;}
-  .pr input:focus{border-color:var(--accent);}
-  /* promedios */
   .prom-avg{font-size:.78rem;font-weight:500;}
-  .prom-range{font-size:.57rem;color:var(--muted);margin-top:1px;}
-  /* log */
-  .log{position:fixed;bottom:1rem;right:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;width:270px;max-height:170px;font-size:.61rem;z-index:100;display:none;}
-  .log.open{display:block;}
-  .lh{padding:.38rem .65rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;color:var(--muted);cursor:pointer;}
-  .lb{padding:.45rem .65rem;overflow-y:auto;max-height:130px;line-height:1.9;color:var(--muted);}
-  .le{display:flex;gap:.35rem;}
-  .le .ts{color:var(--accent);opacity:.7;flex-shrink:0;}
-  /* modal */
-  .ov{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:200;display:none;align-items:center;justify-content:center;}
-  .ov.open{display:flex;}
-  .modal{background:var(--surface);border:1px solid var(--border);border-radius:12px;width:min(480px,95vw);padding:1.8rem;max-height:90vh;overflow-y:auto;}
-  .modal h2{font-family:'Syne',sans-serif;font-size:.95rem;margin-bottom:1rem;color:var(--accent);}
-  .fg2{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:1rem;}
-  .fg2 .fg input,.fg2 .fg select{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:.38rem .55rem;font-family:'IBM Plex Mono',monospace;font-size:.72rem;border-radius:4px;outline:none;}
-  .fg2 .fg input:focus,.fg2 .fg select:focus{border-color:var(--accent);}
-  .ma{display:flex;gap:.5rem;justify-content:flex-end;}
+  .prom-rng{font-size:.57rem;color:var(--muted);margin-top:1px;}
+  .prom-diff{font-size:.57rem;margin-top:1px;}
+  .eco-cell{background:rgba(0,229,180,.05);border-left:2px solid rgba(0,229,180,.25);}
+  .info-bar{padding:.5rem 2rem;font-size:.65rem;color:var(--muted);background:var(--surface);border-bottom:1px solid var(--border);display:flex;gap:1.5rem;flex-wrap:wrap;}
+  .loading{text-align:center;padding:4rem;}
+  .spinner{width:28px;height:28px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1rem;}
+  @keyframes spin{to{transform:rotate(360deg)}}
   ::-webkit-scrollbar{width:4px;height:4px;}
   ::-webkit-scrollbar-track{background:var(--bg);}
   ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
-  @media(max-width:650px){header,.controls,.tw,.upanel{padding-left:1rem;padding-right:1rem;}.stats{flex-wrap:wrap;}.stat{min-width:50%;}.fg2{grid-template-columns:1fr;}}
+  @media(max-width:650px){header,.controls,.tw,.info-bar{padding-left:1rem;padding-right:1rem;}}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">arriendo<span>.cl</span> <span style="color:var(--muted);font-weight:400;font-size:.85rem">/ mercado chile</span></div>
+  <div class="logo">econorent <span>intel</span> <small>/ mercado chile</small></div>
   <div class="status-bar">
-    <span><span class="dot" id="sDot"></span><span id="sTxt">Sin datos</span></span>
-    <span id="sDate">—</span>
-    <button class="btn" onclick="toggleLog()">Log</button>
-    <button class="btn w" onclick="togglePanel()">✎ Actualizar precios</button>
-    <button class="btn p" onclick="openManual()">+ Agregar</button>
+    <span><span class="dot" id="sDot"></span><span id="sTxt">Cargando...</span></span>
+    <span id="sPeriodo"></span>
+    <span id="sDate"></span>
+    <button class="btn" onclick="loadData()">↻ Recargar</button>
   </div>
 </header>
+
+<div class="info-bar">
+  <span>📅 Reserva: 7 días · 1 mes adelante</span>
+  <span><span class="edot" style="background:var(--accent)"></span>Verde = Econorent</span>
+  <span>🔄 Actualización automática: 7:00 AM cada día</span>
+</div>
 
 <div class="tabs">
   <div class="tab active" onclick="setView('t')" id="tab-t">Tabla de precios</div>
   <div class="tab" onclick="setView('p')" id="tab-p">Promedios por ciudad</div>
+  <div class="tab" onclick="setView('r')" id="tab-r">Ranking competitivo</div>
 </div>
 
-<!-- Update panel -->
-<div class="upanel" id="upanel">
-  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem">
-    <div>
-      <div style="font-family:'Syne',sans-serif;font-size:.88rem;font-weight:700">Actualizar precios del mercado</div>
-      <div style="font-size:.65rem;color:var(--muted);margin-top:.2rem">Abre cada sitio → busca para 7 días → ingresa precio/día por categoría → Guardar</div>
-    </div>
-    <div style="display:flex;gap:.5rem;align-items:flex-end">
-      <div class="fg">
-        <label>Ciudad</label>
-        <select id="uCity" onchange="renderCards()">
-          <option>Arica</option><option>Iquique</option><option>Calama</option>
-          <option>Antofagasta</option><option>Copiapó</option><option>La Serena</option>
-          <option>Viña del Mar</option><option selected>Santiago</option><option>Rancagua</option>
-          <option>Los Ángeles</option><option>Concepción</option><option>Temuco</option>
-          <option>Valdivia</option><option>Puerto Montt</option><option>Coyhaique</option>
-          <option>Puerto Natales</option><option>Punta Arenas</option>
-        </select>
-      </div>
-      <button class="btn p" onclick="saveCards()">💾 Guardar ciudad</button>
-    </div>
-  </div>
-  <div class="ugrid" id="ugrid"></div>
-</div>
-
-<!-- Controls -->
 <div class="controls">
   <div class="fg"><label>Ciudad</label><select id="fCity" onchange="renderView()"><option value="">Todas</option></select></div>
   <div class="fg"><label>Categoría</label>
@@ -148,102 +100,49 @@
     </select>
   </div>
   <div class="fg"><label>Empresa</label><select id="fEmp" onchange="renderView()"><option value="">Todas</option></select></div>
-  <div class="fg"><label>Buscar</label><input type="text" id="fSearch" placeholder="modelo, ciudad..." oninput="renderView()"></div>
-  <button class="btn" style="border-color:var(--pricey);color:var(--pricey);align-self:flex-end" onclick="clearAll()">Borrar todo</button>
+  <div class="fg"><label>Buscar</label><input type="text" id="fSrch" placeholder="ciudad, modelo..." oninput="renderView()"></div>
 </div>
 
-<!-- Stats -->
 <div class="stats">
-  <div class="stat"><div class="slabel">Registros</div><div class="sval" id="stTotal">0</div></div>
-  <div class="stat"><div class="slabel">Más barato/día</div><div class="sval" id="stMin">—</div></div>
-  <div class="stat"><div class="slabel">Promedio/día</div><div class="sval" id="stAvg">—</div></div>
-  <div class="stat"><div class="slabel">Ciudades</div><div class="sval" id="stCities">0</div></div>
-  <div class="stat"><div class="slabel">Empresas</div><div class="sval" id="stEmps">0</div></div>
+  <div class="stat"><div class="slabel">Registros</div><div class="sval" id="stT">—</div></div>
+  <div class="stat"><div class="slabel">Más barato/día</div><div class="sval" id="stMn">—</div></div>
+  <div class="stat"><div class="slabel">Promedio mercado</div><div class="sval" id="stAv">—</div></div>
+  <div class="stat"><div class="slabel">Promedio Econorent</div><div class="sval" id="stEc">—</div></div>
+  <div class="stat"><div class="slabel">Ciudades</div><div class="sval" id="stCi">—</div></div>
+  <div class="stat"><div class="slabel">Empresas</div><div class="sval" id="stEm">—</div></div>
 </div>
 
-<!-- Table view -->
 <div class="tw" id="vTabla">
-  <table>
-    <thead><tr>
-      <th onclick="sort('ciudad')">Ciudad</th>
-      <th onclick="sort('region')">Región</th>
-      <th onclick="sort('categoria')">Categoría</th>
-      <th onclick="sort('empresa')">Empresa</th>
-      <th onclick="sort('modelo')">Modelo</th>
-      <th onclick="sort('precio_dia')">Precio/día ↕</th>
-      <th onclick="sort('precio_semana')">Precio/semana</th>
-      <th>Transmisión</th>
-      <th onclick="sort('fecha')">Actualizado</th>
-    </tr></thead>
-    <tbody id="tbody"></tbody>
-  </table>
+  <div class="loading" id="ldg"><div class="spinner"></div><div style="color:var(--muted);font-size:.75rem">Cargando precios...</div></div>
+  <table id="tbl" style="display:none"><thead><tr>
+    <th onclick="srt('ciudad')">Ciudad</th>
+    <th onclick="srt('region')">Región</th>
+    <th onclick="srt('categoria')">Categoría</th>
+    <th onclick="srt('empresa')">Empresa</th>
+    <th onclick="srt('modelo')">Modelo</th>
+    <th onclick="srt('precio_dia')">Precio/día ↕</th>
+    <th onclick="srt('precio_semana')">Precio/semana</th>
+    <th>Transmisión</th>
+    <th onclick="srt('fecha')">Fecha</th>
+  </tr></thead><tbody id="tbody"></tbody></table>
 </div>
-
-<!-- Promedios view -->
-<div class="tw" id="vProm" style="display:none">
-  <table>
-    <thead><tr>
-      <th>Ciudad</th><th>Región</th>
-      <th style="color:var(--cheap)">Económico</th>
-      <th style="color:#00b4e5">Compacto</th>
-      <th style="color:var(--mid)">Intermedio</th>
-      <th style="color:#b440f0">SUV</th>
-      <th style="color:var(--pricey)">Premium</th>
-      <th style="color:#b48c50">Pickup</th>
-    </tr></thead>
-    <tbody id="pbody"></tbody>
-  </table>
-</div>
-
-<!-- Log -->
-<div class="log" id="logEl">
-  <div class="lh" onclick="toggleLog()"><span>Log</span><span>✕</span></div>
-  <div class="lb" id="logBody"></div>
-</div>
-
-<!-- Modal -->
-<div class="ov" id="ov">
-  <div class="modal">
-    <h2>+ Agregar precio</h2>
-    <div class="fg2">
-      <div class="fg"><label>Ciudad</label>
-        <select id="mC">
-          <option>Arica</option><option>Iquique</option><option>Calama</option>
-          <option>Antofagasta</option><option>Copiapó</option><option>La Serena</option>
-          <option>Viña del Mar</option><option selected>Santiago</option><option>Rancagua</option>
-          <option>Los Ángeles</option><option>Concepción</option><option>Temuco</option>
-          <option>Valdivia</option><option>Puerto Montt</option><option>Coyhaique</option>
-          <option>Puerto Natales</option><option>Punta Arenas</option>
-        </select>
-      </div>
-      <div class="fg"><label>Empresa</label>
-        <select id="mE">
-          <option>Econorent</option><option>Salfarent</option><option>Mitta</option>
-          <option>Gama</option><option>Avis</option><option>Sixt</option>
-          <option>Chilean</option><option>Otra</option>
-        </select>
-      </div>
-      <div class="fg"><label>Categoría</label>
-        <select id="mCat">
-          <option>Económico</option><option>Compacto</option><option>Intermedio</option>
-          <option>SUV</option><option>Premium</option><option>Pickup</option>
-        </select>
-      </div>
-      <div class="fg"><label>Modelo</label><input id="mMod" type="text" placeholder="ej: Toyota Yaris"></div>
-      <div class="fg"><label>Precio/día (CLP)</label><input id="mPd" type="number" placeholder="25000"></div>
-      <div class="fg"><label>Precio/semana (CLP)</label><input id="mPs" type="number" placeholder="140000"></div>
-      <div class="fg"><label>Transmisión</label><select id="mT"><option>Manual</option><option>Automático</option></select></div>
-    </div>
-    <div class="ma">
-      <button class="btn" onclick="closeManual()">Cancelar</button>
-      <button class="btn p" onclick="saveManual()">Guardar</button>
-    </div>
-  </div>
-</div>
+<div class="tw" id="vProm" style="display:none"><table>
+  <thead><tr><th>Ciudad</th><th>Región</th>
+    <th style="color:var(--cheap)">Económico</th><th style="color:#00b4e5">Compacto</th>
+    <th style="color:var(--mid)">Intermedio</th><th style="color:#b440f0">SUV</th>
+    <th style="color:var(--pricey)">Premium</th><th style="color:#b48c50">Pickup</th>
+  </tr></thead><tbody id="pbody"></tbody>
+</table></div>
+<div class="tw" id="vRank" style="display:none"><table>
+  <thead><tr><th>Empresa</th>
+    <th style="color:var(--cheap)">Económico</th><th style="color:#00b4e5">Compacto</th>
+    <th style="color:var(--mid)">Intermedio</th><th style="color:#b440f0">SUV</th>
+    <th style="color:var(--pricey)">Premium</th><th style="color:#b48c50">Pickup</th>
+    <th>Promedio general</th>
+  </tr></thead><tbody id="rbody"></tbody>
+</table></div>
 
 <script>
-const SK='rental_cl_v3', LK='rental_log_v3', TK='rental_tg_v2';
-
 const CIUDADES=[
   {c:'Arica',r:'Arica y Parinacota'},{c:'Iquique',r:'Tarapacá'},
   {c:'Calama',r:'Antofagasta'},{c:'Antofagasta',r:'Antofagasta'},
@@ -255,372 +154,170 @@ const CIUDADES=[
   {c:'Coyhaique',r:'Aysén'},{c:'Puerto Natales',r:'Magallanes'},
   {c:'Punta Arenas',r:'Magallanes'},
 ];
-
-const EMPRESAS=[
-  {n:'Econorent',col:'#00e5b4',url:'https://www.econorent.cl'},
-  {n:'Salfarent',col:'#00b4e5',url:'https://www.salfarent.cl'},
-  {n:'Mitta',    col:'#b440f0',url:'https://www.mitta.cl'},
-  {n:'Gama',     col:'#f0c040',url:'https://www.gamarent.cl'},
-  {n:'Avis',     col:'#ff6b35',url:'https://www.avis.cl'},
-  {n:'Sixt',     col:'#ff9900',url:'https://www.sixt.cl'},
-  {n:'Chilean',  col:'#e05070',url:'https://www.chileanrent.cl'},
-];
-
 const CATS=['Económico','Compacto','Intermedio','SUV','Premium','Pickup'];
+const EC={Econorent:'#00e5b4',Salfarent:'#00b4e5',Mitta:'#b440f0',Gama:'#f0c040',Avis:'#ff6b35',Sixt:'#ff9900',Chilean:'#e05070'};
 
-// Precios base mercado chileno (CLP/día) — referencia 2025
-const BASE={
-  Econorent: {Económico:18900,Compacto:22900,Intermedio:28900,SUV:38900,Premium:58900,Pickup:45900},
-  Salfarent: {Económico:17900,Compacto:21900,Intermedio:27900,SUV:36900,Premium:55900,Pickup:43900},
-  Mitta:     {Económico:19900,Compacto:23900,Intermedio:29900,SUV:39900,Premium:61900,Pickup:47900},
-  Gama:      {Económico:20900,Compacto:24900,Intermedio:31900,SUV:41900,Premium:63900,Pickup:49900},
-  Avis:      {Económico:22900,Compacto:27900,Intermedio:34900,SUV:46900,Premium:72900,Pickup:54900},
-  Sixt:      {Económico:24900,Compacto:29900,Intermedio:37900,SUV:49900,Premium:79900,Pickup:58900},
-  Chilean:   {Económico:17500,Compacto:21500,Intermedio:27500,SUV:36500,Premium:54900,Pickup:42900},
-};
+let DATA=[],META={},view='t',sf='precio_dia',sd=1;
 
-// Factor de ajuste por ciudad (distancia, demanda, competencia)
-const FAC={
-  'Arica':1.08,'Iquique':1.06,'Calama':1.14,'Antofagasta':1.05,'Copiapó':1.07,
-  'La Serena':1.02,'Viña del Mar':1.03,'Santiago':1.0,'Rancagua':0.97,
-  'Los Ángeles':0.95,'Concepción':0.98,'Temuco':1.0,'Valdivia':1.02,
-  'Puerto Montt':1.05,'Coyhaique':1.20,'Puerto Natales':1.25,'Punta Arenas':1.12,
-};
-
-const MODS={
-  Económico:['Suzuki Alto','Kia Picanto','Hyundai i10','Chevrolet Spark'],
-  Compacto: ['Toyota Yaris','Hyundai Accent','Kia Rio','Nissan Versa'],
-  Intermedio:['Toyota Corolla','Hyundai Elantra','Kia Cerato','Nissan Sentra'],
-  SUV:      ['Toyota RAV4','Hyundai Tucson','Kia Sportage','Nissan Qashqai'],
-  Premium:  ['BMW Serie 3','Mercedes C-Class','Audi A4','Toyota Camry'],
-  Pickup:   ['Toyota Hilux','Ford Ranger','Nissan Navara','Mitsubishi L200'],
-};
-
-// Empresas NO presentes en ciertas ciudades pequeñas
-const NO_CITY={
-  Sixt:   ['Coyhaique','Puerto Natales','Rancagua','Los Ángeles','Valdivia','Calama'],
-  Chilean:['Coyhaique','Puerto Natales','Calama','Copiapó'],
-  Gama:   ['Coyhaique','Puerto Natales'],
-};
-
-function ld(){try{return JSON.parse(localStorage.getItem(SK)||'[]');}catch{return[];}}
-function sd(a){localStorage.setItem(SK,JSON.stringify(a));}
-function ll(){try{return JSON.parse(localStorage.getItem(LK)||'[]');}catch{return[];}}
-function gtg(){try{return JSON.parse(localStorage.getItem(TK)||'{}');}catch{return{};}}
-function regionOf(c){return(CIUDADES.find(x=>x.c===c)||{r:'—'}).r;}
-function empColor(n){return(EMPRESAS.find(e=>e.n===n)||{col:'#888'}).col;}
-function fmt(n){return n?'$'+Number(n).toLocaleString('es-CL'):'—';}
-function catCls(c){return{Económico:'ce',Compacto:'cc',Intermedio:'ci',SUV:'cs',Premium:'cp',Pickup:'ck'}[c]||'ci';}
-function pc(p,mn,mx){const r=(p-mn)/(mx-mn+1);return r<.33?'cheap':r<.66?'mid':'pricey';}
-function rnd(x){return Math.round(x/100)*100;}
-function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
-
-function addLog(msg){
-  const log=ll();
-  log.unshift({ts:new Date().toLocaleTimeString('es-CL'),msg});
-  if(log.length>60)log.pop();
-  localStorage.setItem(LK,JSON.stringify(log));
-  renderLog();
+async function loadData(){
+  try{
+    const r=await fetch('precios.json?t='+Date.now());
+    if(!r.ok)throw new Error();
+    const j=await r.json();
+    DATA=j.datos||[];META=j;
+    document.getElementById('ldg').style.display='none';
+    document.getElementById('tbl').style.display='';
+    // header
+    const dot=document.getElementById('sDot'),txt=document.getElementById('sTxt');
+    dot.className='dot live';txt.textContent='Datos en vivo';
+    if(META.generado)document.getElementById('sDate').textContent=new Date(META.generado).toLocaleString('es-CL');
+    if(META.periodo)document.getElementById('sPeriodo').textContent=`📅 ${META.periodo.desde} → ${META.periodo.hasta}`;
+    fillFilters();renderView();
+  }catch{
+    document.getElementById('ldg').innerHTML=`
+      <div style="font-size:1.3rem;margin-bottom:.6rem">⏳</div>
+      <div style="font-family:'Syne',sans-serif;color:var(--text);margin-bottom:.4rem">Esperando primera extracción automática</div>
+      <div style="font-size:.7rem;color:var(--muted);line-height:1.8">
+        El scraper corre automáticamente a las 7:00 AM.<br>
+        Para ejecutarlo ahora: ve a <strong style="color:var(--accent)">GitHub → Actions → "Actualizar precios" → Run workflow</strong>
+      </div>`;
+    document.getElementById('sDot').className='dot';
+    document.getElementById('sTxt').textContent='Sin datos';
+  }
 }
 
-// ── View state ──
-let view='t', sf='precio_dia', sd2=1;
+function fillFilters(){
+  const ce=document.getElementById('fCity'),ee=document.getElementById('fEmp');
+  const cities=CIUDADES.map(x=>x.c).filter(c=>DATA.find(r=>r.ciudad===c));
+  const emps=[...new Set(DATA.map(r=>r.empresa))].sort();
+  ce.innerHTML='<option value="">Todas</option>'+cities.map(c=>`<option value="${c}">${c}</option>`).join('');
+  ee.innerHTML='<option value="">Todas</option>'+emps.map(e=>`<option value="${e}">${e}</option>`).join('');
+}
+
+function filtered(){
+  const cy=document.getElementById('fCity').value,ca=document.getElementById('fCat').value,
+        em=document.getElementById('fEmp').value,sr=document.getElementById('fSrch').value.toLowerCase();
+  return DATA.filter(r=>(!cy||r.ciudad===cy)&&(!ca||r.categoria===ca)&&(!em||r.empresa===em)&&
+    (!sr||(r.modelo||'').toLowerCase().includes(sr)||(r.ciudad||'').toLowerCase().includes(sr)));
+}
 
 function setView(v){
   view=v;
-  document.getElementById('vTabla').style.display=v==='t'?'':'none';
-  document.getElementById('vProm').style.display=v==='p'?'':'none';
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('tab-'+v).classList.add('active');
+  [{v:'t',el:'Tabla'},{v:'p',el:'Prom'},{v:'r',el:'Rank'}].forEach(x=>{
+    document.getElementById('v'+x.el).style.display=x.v===v?'':'none';
+    document.getElementById('tab-'+x.v).classList.toggle('active',x.v===v);
+  });
   renderView();
 }
 
-function sort(f){if(sf===f)sd2*=-1;else{sf=f;sd2=1;}renderView();}
+function renderView(){if(view==='t')renderTable();else if(view==='p')renderProm();else renderRank();}
+function srt(f){if(sf===f)sd*=-1;else{sf=f;sd=1;}renderTable();}
+function fmt(n){return n?'$'+Number(n).toLocaleString('es-CL'):'—';}
+function regionOf(c){return(CIUDADES.find(x=>x.c===c)||{r:'—'}).r;}
+function catCls(c){return{Económico:'ce',Compacto:'cc',Intermedio:'ci',SUV:'cs',Premium:'cp',Pickup:'ck'}[c]||'ci';}
+function avg(arr){return arr.length?Math.round(arr.reduce((a,b)=>a+b,0)/arr.length):0;}
 
-function renderView(){
-  if(view==='t')renderTable();
-  else renderPromedios();
-}
-
-// ── Table ──
 function renderTable(){
-  const data=ld();
-  const city=document.getElementById('fCity').value;
-  const cat=document.getElementById('fCat').value;
-  const emp=document.getElementById('fEmp').value;
-  const srch=document.getElementById('fSearch').value.toLowerCase();
-
-  let rows=data.filter(r=>
-    (!city||r.ciudad===city)&&
-    (!cat||r.categoria===cat)&&
-    (!emp||r.empresa===emp)&&
-    (!srch||(r.modelo||'').toLowerCase().includes(srch)||(r.ciudad||'').toLowerCase().includes(srch))
-  );
-  rows.sort((a,b)=>{
+  const rows=[...filtered()].sort((a,b)=>{
     let va=a[sf]??'',vb=b[sf]??'';
     if(sf==='precio_dia'||sf==='precio_semana'){va=+va;vb=+vb;}
-    return va<vb?-sd2:va>vb?sd2:0;
+    return va<vb?-sd:va>vb?sd:0;
   });
-
-  const body=document.getElementById('tbody');
-  if(!rows.length){
-    body.innerHTML=`<tr><td colspan="9" style="text-align:center;padding:3.5rem 1rem;color:var(--muted)">
-      <div style="font-size:2rem;margin-bottom:.5rem">🚗</div>
-      <div style="font-family:'Syne',sans-serif;font-size:.95rem;color:var(--text);margin-bottom:.3rem">Sin datos</div>
-      <div style="font-size:.72rem">Haz clic en <strong style="color:var(--accent)">✎ Actualizar precios</strong> para cargar datos</div>
-    </td></tr>`;
-    updateStats([]);return;
-  }
-
   const prices=rows.map(r=>+r.precio_dia).filter(Boolean);
+  updateStats(rows);
+  if(!prices.length){document.getElementById('tbody').innerHTML=`<tr><td colspan="9" style="text-align:center;padding:3rem;color:var(--muted)">Sin datos</td></tr>`;return;}
   const mn=Math.min(...prices),mx=Math.max(...prices);
+  const city=document.getElementById('fCity').value;
   let html='';
-
   if(!city){
-    const byC={};
-    rows.forEach(r=>{if(!byC[r.ciudad])byC[r.ciudad]=[];byC[r.ciudad].push(r);});
+    const byC={};rows.forEach(r=>{if(!byC[r.ciudad])byC[r.ciudad]=[];byC[r.ciudad].push(r);});
     CIUDADES.forEach(({c})=>{
       if(!byC[c])return;
       html+=`<tr class="ch"><td colspan="9">📍 ${c} — ${regionOf(c)}</td></tr>`;
       byC[c].forEach(r=>{html+=rowH(r,mn,mx);});
     });
-  } else {
-    rows.forEach(r=>{html+=rowH(r,mn,mx);});
-  }
-  body.innerHTML=html;
-  updateStats(data);
-  fillFilters(data);
+  } else rows.forEach(r=>{html+=rowH(r,mn,mx);});
+  document.getElementById('tbody').innerHTML=html;
 }
 
 function rowH(r,mn,mx){
-  const date=r.fecha?new Date(r.fecha).toLocaleDateString('es-CL'):'—';
-  const col=empColor(r.empresa);
-  return `<tr>
+  const p=+r.precio_dia,ratio=(p-mn)/(mx-mn+1);
+  const pc=ratio<.33?'cheap':ratio<.66?'mid':'pricey';
+  const isE=r.empresa==='Econorent';
+  const col=EC[r.empresa]||'#888';
+  return`<tr class="${isE?'eco':''}">
     <td>${r.ciudad||'—'}</td>
     <td style="color:var(--muted);font-size:.67rem">${regionOf(r.ciudad)}</td>
-    <td><span class="badge ${catCls(r.categoria)}">${r.categoria||'—'}</span></td>
-    <td><span class="edot" style="background:${col}"></span>${r.empresa||'—'}</td>
+    <td><span class="badge ${catCls(r.categoria)}">${r.categoria}</span></td>
+    <td><span class="edot" style="background:${col}"></span><span style="${isE?'color:var(--accent);font-weight:600':''}">${r.empresa}</span></td>
     <td style="color:var(--muted)">${r.modelo||'—'}</td>
-    <td><span class="price ${pc(+r.precio_dia,mn,mx)}">${fmt(r.precio_dia)}</span></td>
+    <td><span class="price ${pc}">${fmt(p)}</span></td>
     <td style="color:var(--muted)">${fmt(r.precio_semana)}</td>
     <td style="color:var(--muted);font-size:.67rem">${r.transmision||'—'}</td>
-    <td style="color:var(--muted);font-size:.67rem">${date}</td>
+    <td style="color:var(--muted);font-size:.67rem">${r.fecha?new Date(r.fecha).toLocaleDateString('es-CL'):'—'}</td>
   </tr>`;
 }
 
-// ── Promedios ──
-function renderPromedios(){
-  const data=ld();
-  const body=document.getElementById('pbody');
-  if(!data.length){body.innerHTML=`<tr><td colspan="8" style="text-align:center;padding:3rem;color:var(--muted)">Sin datos</td></tr>`;return;}
+function updateStats(rows){
+  const prices=rows.map(r=>+r.precio_dia).filter(Boolean);
+  const ecoP=rows.filter(r=>r.empresa==='Econorent').map(r=>+r.precio_dia).filter(Boolean);
+  document.getElementById('stT').textContent=rows.length;
+  document.getElementById('stMn').textContent=prices.length?fmt(Math.min(...prices)):'—';
+  document.getElementById('stAv').textContent=prices.length?fmt(avg(prices)):'—';
+  document.getElementById('stEc').textContent=ecoP.length?fmt(avg(ecoP)):'—';
+  document.getElementById('stCi').textContent=new Set(rows.map(r=>r.ciudad)).size;
+  document.getElementById('stEm').textContent=new Set(rows.map(r=>r.empresa)).size;
+}
+
+function renderProm(){
+  const rows=filtered();
   let html='';
   CIUDADES.forEach(({c,r})=>{
-    const cd=data.filter(x=>x.ciudad===c);
-    if(!cd.length)return;
+    const cd=rows.filter(x=>x.ciudad===c);if(!cd.length)return;
     const cols=CATS.map(cat=>{
-      const items=cd.filter(x=>x.categoria===cat);
-      if(!items.length)return'<td style="color:var(--muted)">—</td>';
-      const avg=Math.round(items.reduce((s,x)=>s+(+x.precio_dia),0)/items.length);
-      const mn=Math.min(...items.map(x=>+x.precio_dia));
-      const mx=Math.max(...items.map(x=>+x.precio_dia));
-      return`<td><div class="prom-avg">${fmt(avg)}</div><div class="prom-range">${fmt(mn)} – ${fmt(mx)}</div></td>`;
+      const items=cd.filter(x=>x.categoria===cat);if(!items.length)return'<td style="color:var(--muted)">—</td>';
+      const prices=items.map(x=>+x.precio_dia).filter(Boolean);
+      const a=avg(prices),mn=Math.min(...prices),mx=Math.max(...prices);
+      const ecoI=items.find(x=>x.empresa==='Econorent');
+      const ecoP=ecoI?+ecoI.precio_dia:null;
+      const diff=ecoP&&a?Math.round((ecoP-a)/a*100):null;
+      const diffHtml=diff!==null?`<div class="prom-diff" style="color:${diff>5?'var(--pricey)':diff<-5?'var(--cheap)':'var(--muted)'}">${diff>0?'+':''}${diff}% Eco vs prom</div>`:'';
+      return`<td class="${ecoI?'eco-cell':''}"><div class="prom-avg">${fmt(a)}</div><div class="prom-rng">${fmt(mn)} – ${fmt(mx)}</div>${diffHtml}</td>`;
     });
     html+=`<tr><td style="font-weight:500">${c}</td><td style="color:var(--muted);font-size:.67rem">${r}</td>${cols.join('')}</tr>`;
   });
-  body.innerHTML=html||`<tr><td colspan="8" style="text-align:center;padding:3rem;color:var(--muted)">Sin datos</td></tr>`;
+  document.getElementById('pbody').innerHTML=html||`<tr><td colspan="8" style="text-align:center;padding:3rem;color:var(--muted)">Sin datos</td></tr>`;
 }
 
-// ── Stats & filters ──
-function updateStats(data){
-  const prices=data.map(r=>+r.precio_dia).filter(Boolean);
-  document.getElementById('stTotal').textContent=data.length;
-  document.getElementById('stMin').textContent=prices.length?fmt(Math.min(...prices)):'—';
-  document.getElementById('stAvg').textContent=prices.length?fmt(Math.round(prices.reduce((a,b)=>a+b,0)/prices.length)):'—';
-  document.getElementById('stCities').textContent=new Set(data.map(r=>r.ciudad)).size;
-  document.getElementById('stEmps').textContent=new Set(data.map(r=>r.empresa)).size;
-  const dot=document.getElementById('sDot'),txt=document.getElementById('sTxt');
-  if(data.length){
-    dot.className='dot live';txt.textContent='Datos cargados';
-    const last=data.reduce((a,b)=>new Date(a.fecha)>new Date(b.fecha)?a:b,data[0]);
-    document.getElementById('sDate').textContent=new Date(last.fecha).toLocaleDateString('es-CL');
-  } else {dot.className='dot';txt.textContent='Sin datos';document.getElementById('sDate').textContent='—';}
-}
-
-function fillFilters(data){
-  const ce=document.getElementById('fCity'),ee=document.getElementById('fEmp');
-  const cc=ce.value,ec=ee.value;
-  const cities=CIUDADES.map(x=>x.c).filter(c=>data.find(r=>r.ciudad===c));
-  const emps=[...new Set(data.map(r=>r.empresa))].sort();
-  ce.innerHTML='<option value="">Todas</option>'+cities.map(c=>`<option ${c===cc?'selected':''} value="${c}">${c}</option>`).join('');
-  ee.innerHTML='<option value="">Todas</option>'+emps.map(e=>`<option ${e===ec?'selected':''} value="${e}">${e}</option>`).join('');
-}
-
-// ── Update panel ──
-function togglePanel(){
-  document.getElementById('upanel').classList.toggle('open');
-  renderCards();
-}
-
-function renderCards(){
-  const ciudad=document.getElementById('uCity').value;
-  const data=ld();
-  document.getElementById('ugrid').innerHTML=EMPRESAS.map(emp=>{
-    // Skip if empresa not in this city
-    if((NO_CITY[emp.n]||[]).includes(ciudad))return'';
-    const inputs=CATS.map(cat=>{
-      const ex=data.find(r=>r.ciudad===ciudad&&r.empresa===emp.n&&r.categoria===cat);
-      const ref=rnd((BASE[emp.n]?.[cat]||25000)*(FAC[ciudad]||1));
-      return`<div class="pr"><label>${cat}</label><input type="number" id="u_${emp.n}_${cat}" value="${ex?ex.precio_dia:''}" placeholder="${ref}"></div>`;
-    }).join('');
-    return`<div class="ecard">
-      <h3><span class="edot" style="background:${emp.col};width:7px;height:7px"></span>${emp.n}<a href="${emp.url}" target="_blank" rel="noopener">↗ abrir sitio</a></h3>
-      ${inputs}
-    </div>`;
-  }).join('');
-}
-
-function saveCards(){
-  const ciudad=document.getElementById('uCity').value;
-  let data=ld().filter(r=>r.ciudad!==ciudad);
-  const now=new Date().toISOString();
-  let count=0;
-  EMPRESAS.forEach(emp=>{
-    if((NO_CITY[emp.n]||[]).includes(ciudad))return;
-    CATS.forEach(cat=>{
-      const el=document.getElementById(`u_${emp.n}_${cat}`);
-      if(!el)return;
-      const val=parseInt(el.value||el.placeholder);
-      if(!val||val<1000)return;
-      data.push({
-        id:`${emp.n}_${ciudad}_${cat}`,
-        ciudad,empresa:emp.n,categoria:cat,
-        region:regionOf(ciudad),
-        modelo:pick(MODS[cat]),
-        precio_dia:val,
-        precio_semana:rnd(val*6.3),
-        transmision:(cat==='Premium'||cat==='SUV')?'Automático':'Manual',
-        fuente:emp.n,fecha:now,
-      });
-      count++;
+function renderRank(){
+  const rows=filtered();
+  const empresas=[...new Set(rows.map(r=>r.empresa))].sort((a,b)=>a==='Econorent'?-1:b==='Econorent'?1:a.localeCompare(b));
+  let html='';
+  empresas.forEach(emp=>{
+    const er=rows.filter(r=>r.empresa===emp);
+    const cols=CATS.map(cat=>{
+      const items=er.filter(r=>r.categoria===cat);if(!items.length)return'<td style="color:var(--muted)">—</td>';
+      const a=avg(items.map(r=>+r.precio_dia).filter(Boolean));
+      const mktItems=rows.filter(r=>r.categoria===cat);
+      const mktAvg=avg(mktItems.map(r=>+r.precio_dia).filter(Boolean));
+      const diff=mktAvg?Math.round((a-mktAvg)/mktAvg*100):0;
+      const pc=diff<-5?'cheap':diff>5?'pricey':'mid';
+      return`<td><span class="price ${pc}">${fmt(a)}</span><div style="font-size:.57rem;color:var(--muted);margin-top:1px">${diff>0?'+':''}${diff}% vs prom</div></td>`;
     });
+    const allP=er.map(r=>+r.precio_dia).filter(Boolean);
+    const ga=avg(allP);
+    const isE=emp==='Econorent';
+    const col=EC[emp]||'#888';
+    html+=`<tr class="${isE?'eco':''}">
+      <td><span class="edot" style="background:${col}"></span><span style="${isE?'color:var(--accent);font-weight:600':''}">${emp}</span></td>
+      ${cols.join('')}
+      <td><strong class="price mid">${fmt(ga)}</strong></td>
+    </tr>`;
   });
-  sd(data);
-  addLog(`✅ ${ciudad}: ${count} precios guardados`);
-  sendTG(ciudad,count);
-  fillFilters(data);
-  renderView();
-  // Move to next city automatically
-  const uCity=document.getElementById('uCity');
-  const idx=[...uCity.options].findIndex(o=>o.value===ciudad);
-  if(idx<uCity.options.length-1){uCity.selectedIndex=idx+1;renderCards();}
+  document.getElementById('rbody').innerHTML=html||`<tr><td colspan="8" style="text-align:center;padding:3rem;color:var(--muted)">Sin datos</td></tr>`;
 }
 
-// ── Reference data loader ──
-function loadRef(){
-  if(ld().length>0)return;
-  const now=new Date().toISOString();
-  const entries=[];
-  CIUDADES.forEach(({c})=>{
-    const fac=FAC[c]||1;
-    EMPRESAS.forEach(emp=>{
-      if((NO_CITY[emp.n]||[]).includes(c))return;
-      CATS.forEach(cat=>{
-        const base=BASE[emp.n]?.[cat]||25000;
-        const precio=rnd(base*fac);
-        entries.push({
-          id:`${emp.n}_${c}_${cat}`,ciudad:c,empresa:emp.n,categoria:cat,
-          region:regionOf(c),modelo:pick(MODS[cat]),
-          precio_dia:precio,precio_semana:rnd(precio*6.3),
-          transmision:(cat==='Premium'||cat==='SUV')?'Automático':'Manual',
-          fuente:emp.n,fecha:now,
-        });
-      });
-    });
-  });
-  sd(entries);
-  addLog(`📦 ${entries.length} precios de referencia cargados (mercado chileno 2025)`);
-  addLog('✏️ Usa "Actualizar precios" para ingresar valores reales de cada empresa');
-}
-
-// ── Manual modal ──
-function openManual(){document.getElementById('ov').classList.add('open');}
-function closeManual(){document.getElementById('ov').classList.remove('open');}
-function saveManual(){
-  const ciudad=document.getElementById('mC').value;
-  const emp=document.getElementById('mE').value;
-  const cat=document.getElementById('mCat').value;
-  const pd=+document.getElementById('mPd').value;
-  if(!pd){alert('Ingresa precio/día');return;}
-  const data=ld();
-  const idx=data.findIndex(r=>r.id===`${emp}_${ciudad}_${cat}`);
-  const entry={id:`${emp}_${ciudad}_${cat}`,ciudad,empresa:emp,categoria:cat,
-    region:regionOf(ciudad),modelo:document.getElementById('mMod').value||pick(MODS[cat]),
-    precio_dia:pd,precio_semana:+document.getElementById('mPs').value||rnd(pd*6.3),
-    transmision:document.getElementById('mT').value,fuente:emp,fecha:new Date().toISOString()};
-  if(idx>=0)data[idx]=entry;else data.push(entry);
-  sd(data);
-  addLog(`✚ ${emp} ${ciudad} ${cat}: ${fmt(pd)}/día`);
-  closeManual();renderView();
-}
-
-// ── Clear ──
-function clearAll(){
-  if(!confirm('¿Borrar todos los datos guardados?'))return;
-  localStorage.removeItem(SK);
-  addLog('🗑 Datos borrados');
-  renderView();
-}
-
-// ── Log ──
-function toggleLog(){document.getElementById('logEl').classList.toggle('open');renderLog();}
-function renderLog(){
-  const log=ll();
-  document.getElementById('logBody').innerHTML=log.map(l=>`<div class="le"><span class="ts">${l.ts}</span>${l.msg}</div>`).join('')||'<span style="opacity:.4">Sin eventos.</span>';
-}
-
-// ── Telegram ──
-async function sendTG(ciudad,count){
-  const cfg=gtg();
-  if(!cfg.token||!cfg.chatId)return;
-  const msg=`🚗 *Precios actualizados*\n\n📍 ${ciudad}\n✅ ${count} precios guardados\n📅 ${new Date().toLocaleString('es-CL')}`;
-  try{
-    const r=await fetch(`https://api.telegram.org/bot${cfg.token}/sendMessage`,{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({chat_id:cfg.chatId,text:msg,parse_mode:'Markdown'})
-    });
-    const j=await r.json();
-    addLog(j.ok?'📨 Telegram: enviado':'✗ Telegram: '+j.description);
-  }catch(e){addLog('✗ Telegram: '+e.message);}
-}
-
-function setupTG(){
-  const cfg=gtg();
-  if(cfg.token)return;
-  setTimeout(()=>{
-    if(!confirm('¿Configurar notificaciones de Telegram?'))return;
-    const token=prompt('Token de tu bot (@BotFather):');
-    const chatId=prompt('Tu Chat ID (@userinfobot):');
-    if(token&&chatId){localStorage.setItem(TK,JSON.stringify({token,chatId}));addLog('✅ Telegram configurado');}
-  },1500);
-}
-
-// ── Recordatorio semanal ──
-function checkReminder(){
-  const next=parseInt(localStorage.getItem('rental_rem')||'0');
-  if(Date.now()>=next&&ld().length>0){
-    addLog('⏰ Recordatorio: actualiza los precios esta semana');
-    localStorage.setItem('rental_rem',Date.now()+7*24*60*60*1000);
-  }
-}
-
-// ── Init ──
-loadRef();
-renderView();
-renderLog();
-fillFilters(ld());
-checkReminder();
-setInterval(checkReminder,60*60*1000);
-setupTG();
+loadData();
 </script>
 </body>
 </html>
